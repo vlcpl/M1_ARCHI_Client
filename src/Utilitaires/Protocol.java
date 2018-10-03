@@ -2,10 +2,10 @@ package Utilitaires;
 
 import java.io.IOException;
 
-public class Protocole {
+public class Protocol {
 	private Transport ts;
 	
-	public Protocole(String host, int port) {
+	public Protocol(String host, int port) {
 		// On essaye d'accéder au serveur
 		try {
 			ts = new Transport(host, port);
@@ -16,20 +16,18 @@ public class Protocole {
 		}
 	}
 	
-	Object protocolGetRequest(String path) {
-		//if sendBeginConnectionRequest true then
-		//envoyerRequete
-		//envoyerFinConnexion
+	public Object protocolGetRequest(String path) {
+		Object response = null;
 		try {
 			if(openConnectionRequest()) {
-				Object response = this.sendRequest(path);
-				
+				response = this.sendRequest(path);
+				this.closeConnectionRequest();
 			}
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return response;
 		}
-		return null;
+		return response;
 	}
 
 	/**
@@ -71,7 +69,6 @@ public class Protocole {
 			ts.envoyer(requestParameter);
 
 			String response = (String) ts.recevoir();
-			System.out.println(response);
 			return response;
 		} catch (IOException e) {
 			System.err.println("An error occured during the request, please retry later");
