@@ -5,19 +5,20 @@ public class FileClient {
 
 	private static boolean usageOk(String[] argv) {
 		if (argv.length != 2) {
-			String msg = "usage is: " + "FileClient server-name file-name";
+			String msg = "USAGE IS: " + "FileClient server-name file-name";
 			System.out.println(msg);
 			return false;
 		}
 		return true;
 	}
 
-	public static void main(String[] argv) throws ClassNotFoundException {
+	public static void main(String[] argv) throws Exception {
 		if (!usageOk(argv))
 			System.exit(1);
 		
 		Protocol p = new Protocol(argv[0], PORT);
-		String serverResponse = (String) p.protocolGetRequest(argv[1]);
+		p.sendRequest(argv[1]);
+		String serverResponse = (String) p.receiveResponse();
 		System.out.println("RESPONSE FROM SERVER: " + serverResponse);
 	}
 }
